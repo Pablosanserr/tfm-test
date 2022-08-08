@@ -7,7 +7,7 @@
 #include <tfm_veneers.h>
 #include <tfm_ns_interface.h>
 
-#include "dummy_partition.h"
+#include "secure_partition_interface.h"
 
 #if defined(CONFIG_TFM_IPC)
 #include "psa/client.h"

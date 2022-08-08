@@ -8,7 +8,7 @@
 #include <tfm_veneers.h>
 #include <tfm_ns_interface.h>
 
-#include "dummy_partition.h"
+#include "secure_partition_interface.h"
 
 void main(void)
 {

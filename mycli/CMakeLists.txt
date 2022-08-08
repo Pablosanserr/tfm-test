@@ -24,7 +24,7 @@ project(mycli)
 
 target_sources(app PRIVATE
   src/main.c
-  src/dummy_partition.c
+  src/secure_partition_interface.c
 )
 
 target_include_directories(app PRIVATE
