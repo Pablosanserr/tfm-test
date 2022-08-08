@@ -19,7 +19,7 @@ target_include_directories(tfm_partitions
 
 target_sources(tfm_app_rot_partition_dp
     PRIVATE
-        dummy_partition.c
+        secure_partition.c
 )
 
 # The generated sources
