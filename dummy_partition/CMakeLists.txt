@@ -10,11 +10,11 @@ target_include_directories(tfm_app_rot_partition_dp
     INTERFACE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     PRIVATE
-        ${CMAKE_BINARY_DIR}/../dummy_partition
+        ${CMAKE_BINARY_DIR}/dummy_partition
 )
 target_include_directories(tfm_partitions
     INTERFACE
-        ${CMAKE_BINARY_DIR}/../dummy_partition
+        ${CMAKE_BINARY_DIR}/dummy_partition
 )
 
 target_sources(tfm_app_rot_partition_dp
@@ -26,12 +26,12 @@ target_sources(tfm_app_rot_partition_dp
 target_sources(tfm_app_rot_partition_dp
     PRIVATE
         $<$<BOOL:${TFM_PSA_API}>:
-            ${CMAKE_BINARY_DIR}/../dummy_partition/auto_generated/intermedia_tfm_dummy_partition.c>
+            ${CMAKE_BINARY_DIR}/dummy_partition/auto_generated/intermedia_tfm_dummy_partition.c>
 )
 target_sources(tfm_partitions
     INTERFACE
         $<$<BOOL:${TFM_PSA_API}>:
-            ${CMAKE_BINARY_DIR}/../dummy_partition/auto_generated/load_info_tfm_dummy_partition.c>
+            ${CMAKE_BINARY_DIR}/dummy_partition/auto_generated/load_info_tfm_dummy_partition.c>
 )
 
 target_link_libraries(tfm_app_rot_partition_dp
