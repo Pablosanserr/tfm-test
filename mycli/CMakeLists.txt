@@ -21,11 +21,21 @@ set_property(TARGET zephyr_property_target
 )
 
 project(mycli)
+add_definitions(-DNRF)
 
 target_sources(app PRIVATE
   src/main.c
   src/secure_partition_interface.c
+  ../lib/bls_hsm_ns.c
+  ../lib/common.c
 )
+
+zephyr_library_include_directories(
+  ../lib/
+)
+
+add_library(testlib STATIC IMPORTED)
+target_link_libraries(app PUBLIC ${APPLICATION_SOURCE_DIR}/../lib/libblst.a)
 
 target_include_directories(app PRIVATE
   $<TARGET_PROPERTY:tfm,TFM_BINARY_DIR>/install/interface/include
