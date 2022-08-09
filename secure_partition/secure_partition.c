@@ -60,8 +60,6 @@ static psa_status_t tfm_dp_secret_digest(uint32_t secret_index,
 	return PSA_SUCCESS;
 }
 
-#ifndef TFM_PSA_API
-
 #include "tfm_memory_utils.h"
 
 void psa_write_digest(void *handle, uint8_t *digest, uint32_t digest_size)
@@ -91,79 +89,7 @@ psa_status_t tfm_dp_secret_digest_req(psa_invec *in_vec, size_t in_len,
 				    (void *)out_vec[0].base);
 }
 
-#else /* !defined(TFM_PSA_API) */
-#include "psa/service.h"
-#include "psa_manifest/tfm_dummy_partition.h"
 
-typedef psa_status_t (*dp_func_t)(psa_msg_t *);
-
-static void psa_write_digest(void *handle, uint8_t *digest,
-			     uint32_t digest_size)
-{
-	psa_write((psa_handle_t)handle, 0, digest, digest_size);
-}
-
-static psa_status_t tfm_dp_secret_digest_ipc(psa_msg_t *msg)
-{
-	size_t num = 0;
-	uint32_t secret_index;
-
-	if (msg->in_size[0] != sizeof(secret_index)) {
-		/* The size of the argument is incorrect */
-		return PSA_ERROR_PROGRAMMER_ERROR;
-	}
-
-	num = psa_read(msg->handle, 0, &secret_index, msg->in_size[0]);
-	if (num != msg->in_size[0]) {
-		return PSA_ERROR_PROGRAMMER_ERROR;
-	}
-
-	return tfm_dp_secret_digest(secret_index, msg->out_size[0],
-				    &msg->out_size[0], psa_write_digest,
-				    (void *)msg->handle);
-}
-
-
-static void dp_signal_handle(psa_signal_t signal, dp_func_t pfn)
-{
-	psa_status_t status;
-	psa_msg_t msg;
-
-	status = psa_get(signal, &msg);
-	switch (msg.type) {
-	case PSA_IPC_CONNECT:
-		psa_reply(msg.handle, PSA_SUCCESS);
-		break;
-	case PSA_IPC_CALL:
-		status = pfn(&msg);
-		psa_reply(msg.handle, status);
-		break;
-	case PSA_IPC_DISCONNECT:
-		psa_reply(msg.handle, PSA_SUCCESS);
-		break;
-	default:
-		psa_panic();
-	}
-}
-#endif /* !defined(TFM_PSA_API) */
-
-psa_status_t tfm_dp_req_mngr_init(void)
-{
-#ifdef TFM_PSA_API
-	psa_signal_t signals = 0;
-
-	while (1) {
-		signals = psa_wait(PSA_WAIT_ANY, PSA_BLOCK);
-		if (signals & TFM_DP_SECRET_DIGEST_SIGNAL) {
-			dp_signal_handle(TFM_DP_SECRET_DIGEST_SIGNAL,
-					 tfm_dp_secret_digest_ipc);
-		} else {
-			psa_panic();
-		}
-	}
-
-	return PSA_ERROR_SERVICE_FAILURE;
-#else
+psa_status_t tfm_dp_req_mngr_init(void){
 	return PSA_SUCCESS;
-#endif
 }
