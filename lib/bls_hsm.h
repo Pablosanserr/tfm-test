@@ -109,9 +109,6 @@ int sig_parse(char* sig_hex, blst_p2_affine* sig, char* buff){
         return error;
 }
 
-#ifdef NRF
-__TZ_NONSECURE_ENTRY_FUNC
-#endif
 /**
  * @brief Returns the number of stored keys
 */
@@ -119,9 +116,6 @@ int get_keystore_size(){
         return keystore_size;
 }
 
-#ifdef NRF
-__TZ_NONSECURE_ENTRY_FUNC
-#endif
 /**
  * @brief Store given public key
  * 
@@ -134,9 +128,6 @@ void store_pk(char* public_key_hex){
         }
 }
 
-#ifdef NRF
-__TZ_NONSECURE_ENTRY_FUNC
-#endif
 /**
  * @brief Gets the key stored at the given index. Returns 0 on success and -1 if index is incorrect
  * 
@@ -151,9 +142,6 @@ int get_key(int index, char* public_key_hex){
         return 0;
 }
 
-#ifdef NRF
-__TZ_NONSECURE_ENTRY_FUNC
-#endif
 /**
  * @brief Gets all stored keys
  * 
@@ -167,9 +155,6 @@ void get_keys(char public_keys_hex_store_ns[keystore_size][96]){
         }
 }
 
-#ifdef NRF
-__TZ_NONSECURE_ENTRY_FUNC
-#endif
 void hash(uint8_t* out, uint8_t* in, size_t size){
 #ifdef NRF
 	    ocrypto_sha256(out, in, size);
@@ -182,7 +167,6 @@ void hash(uint8_t* out, uint8_t* in, size_t size){
 
 
 #ifdef NRF
-__TZ_NONSECURE_ENTRY_FUNC
 void aes128ctr(uint8_t* key, uint8_t* iv, uint8_t* in, uint8_t* out){
     ocrypto_aes_ctr_ctx ctx;
     ocrypto_aes_ctr_init(&ctx, key, 16, iv);
@@ -190,9 +174,6 @@ void aes128ctr(uint8_t* key, uint8_t* iv, uint8_t* in, uint8_t* out){
 }
 #endif
 
-#ifdef NRF
-__TZ_NONSECURE_ENTRY_FUNC
-#endif
 /**
  * @brief Searchs given public key. If found, returns index. If not found, returns-1
  * 
@@ -229,9 +210,6 @@ int pk_in_keystore(char * public_key_hex, int offset){
         return ret;
 }
 
-#ifdef NRF
-__TZ_NONSECURE_ENTRY_FUNC
-#endif
 /**
  * @brief Generates a new pair of public key and secret key. Returns index of the generated pair
  * 
@@ -284,9 +262,6 @@ int secure_keygen(char* info){
         return keystore_size-1;
 }
 
-#ifdef NRF
-__TZ_NONSECURE_ENTRY_FUNC
-#endif
 /**
  * @brief Signs given message with given public key. This public key must be stored (with its corresponding secret key). Returns 0 if success
  * 
@@ -319,9 +294,6 @@ int sign_pk(char* pk, char* msg, char* sign){
         }      
 }
 
-#ifdef NRF
-__TZ_NONSECURE_ENTRY_FUNC
-#endif
 /**
  * @brief Verifies signature of given message and public key. Returns BLSTSUCCESS if success and BLSTFAIL otherwise
  * 
@@ -347,9 +319,6 @@ int verify_sign(char* pk, char* msg, char* sig){
         }
 }
 
-#ifdef NRF
-__TZ_NONSECURE_ENTRY_FUNC
-#endif
 /**
  * @brief Deletes all keys
 */
@@ -359,9 +328,6 @@ void reset(){
         keystore_size = 0;
 }
 
-#ifdef NRF
-__TZ_NONSECURE_ENTRY_FUNC
-#endif
 /**
  * @brief Generates a public key from given secret and store both. Returns index of stored pair
  * 
