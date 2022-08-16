@@ -22,6 +22,27 @@
       "non_secure_clients": true,
       "version": 1,
       "version_policy": "STRICT"
+    },
+    {
+      "name": "TFM_GET_KEYSTORE_SIZE",
+      "signal": "TFM_GET_KEYSTORE_SIZE_REQ",
+      "non_secure_clients": true,
+      "version": 1,
+      "version_policy": "STRICT"
+    },
+    {
+      "name": "TFM_SECURE_KEYGEN",
+      "signal": "TFM_SECURE_KEYGEN_REQ",
+      "non_secure_clients": true,
+      "version": 1,
+      "version_policy": "STRICT"
+    },
+    {
+      "name": "TFM_GET_KEY",
+      "signal": "TFM_GET_KEY_REQ",
+      "non_secure_clients": true,
+      "version": 1,
+      "version_policy": "STRICT"
     }
   ]
 }

@@ -5,7 +5,7 @@
   
 #include <stdint.h>
 
-int pk_in_keystore(char * public_key_hex, int offset);
+/*int pk_in_keystore(char * public_key_hex, int offset);
 int secure_keygen(char* info);
 int sign_pk(char* pk, char* msg, char* sign);
 void reset();
@@ -15,7 +15,7 @@ int get_key(int index, char* public_key_hex);
 void get_keys(char** public_keys_hex_store_ns);
 int import_sk(char* sk);
 int PBKDF2(uint8_t* salt, uint8_t* password, int it_cnt, uint8_t* key);
-void aes128ctr(uint8_t* key, uint8_t* iv, uint8_t* in, uint8_t* out);
+void aes128ctr(uint8_t* key, uint8_t* iv, uint8_t* in, uint8_t* out);*/
 
 int keygen(char* data, char* buff);
 void get_signature(char* pk, char* msg, char* signature);

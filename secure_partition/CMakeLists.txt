@@ -17,6 +17,8 @@ target_include_directories(tfm_partitions
         ${CMAKE_BINARY_DIR}/secure_partition
 )
 
+target_include_directories(tfm_app_rot_partition_sp PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib)
+
 target_sources(tfm_app_rot_partition_sp
     PRIVATE
         secure_partition.c
@@ -42,6 +44,21 @@ target_link_libraries(tfm_app_rot_partition_sp
         platform_s
         tfm_psa_rot_partition_crypto
 )
+
+#target_link_libraries(tfm_app_rot_partition_sp
+#    PRIVATE
+#        ${CMAKE_CURRENT_SOURCE_DIR}/../lib/libblst.a
+#)
+
+add_library(mylib_lib STATIC IMPORTED GLOBAL)
+add_dependencies(
+  mylib_lib
+  mylib_project
+  )
+set_target_properties(mylib_lib PROPERTIES IMPORTED_LOCATION             ${CMAKE_CURRENT_SOURCE_DIR}/../lib/libblst.a)
+set_target_properties(mylib_lib PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/../lib)
+
+target_link_libraries(tfm_app_rot_partition_sp PUBLIC mylib_lib)
 
 target_link_libraries(tfm_partitions
     INTERFACE

@@ -34,8 +34,18 @@ zephyr_library_include_directories(
   ../lib/
 )
 
-add_library(testlib STATIC IMPORTED)
-target_link_libraries(app PUBLIC ${APPLICATION_SOURCE_DIR}/../lib/libblst.a)
+#add_library(testlib STATIC IMPORTED)
+#target_link_libraries(app PUBLIC ${APPLICATION_SOURCE_DIR}/../lib/libblst.a)
+
+#add_library(mylib_lib STATIC IMPORTED GLOBAL)
+#add_dependencies(
+#  mylib_lib
+#  mylib_project
+#  )
+#set_target_properties(mylib_lib PROPERTIES IMPORTED_LOCATION             ${APPLICATION_SOURCE_DIR}/../lib/libblst.a)
+#set_target_properties(mylib_lib PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${APPLICATION_SOURCE_DIR}/../lib)
+
+#target_link_libraries(app PUBLIC mylib_lib)
 
 target_include_directories(app PRIVATE
   $<TARGET_PROPERTY:tfm,TFM_BINARY_DIR>/install/interface/include

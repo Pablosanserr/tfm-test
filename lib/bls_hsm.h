@@ -167,11 +167,13 @@ void hash(uint8_t* out, uint8_t* in, size_t size){
 
 
 #ifdef NRF
+// TODO
+/*
 void aes128ctr(uint8_t* key, uint8_t* iv, uint8_t* in, uint8_t* out){
     ocrypto_aes_ctr_ctx ctx;
     ocrypto_aes_ctr_init(&ctx, key, 16, iv);
     ocrypto_aes_ctr_decrypt(&ctx, out, in, 32);
-}
+}*/
 #endif
 
 /**
@@ -229,14 +231,20 @@ int secure_keygen(char* info){
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 #ifdef NRF
-	    const int random_number_len = 144;     
+        // TODO
+	    /*const int random_number_len = 144;     
         uint8_t random_number[random_number_len];
         size_t olen = random_number_len;
         int ret;
 
         ret = nrf_cc3xx_platform_ctr_drbg_get(NULL, random_number, random_number_len, &olen);
         
-        ocrypto_sha256(ikm, random_number, random_number_len);
+        ocrypto_sha256(ikm, random_number, random_number_len);*/
+
+        // This 'for' should not be here
+        for(int i = 0; i < 32; i++){
+            ikm[i] = 0;
+        }
 #else
         for(int i = 0; i < 32; i++){
             ikm[i] = rand();
@@ -249,13 +257,13 @@ int secure_keygen(char* info){
 
         // Secret key (256-bit scalar)
         blst_keygen(secret_keys_store + keystore_size*sizeof(blst_scalar), ikm, sizeof(ikm), info, sizeof(info));
-
+        
         // Public key
-        blst_sk_to_pk_in_g1(&pk, secret_keys_store + keystore_size*sizeof(blst_scalar));
+        /*blst_sk_to_pk_in_g1(&pk, secret_keys_store + keystore_size*sizeof(blst_scalar));
         blst_p1_compress(out, &pk);
         if(bin2hex(out, sizeof(out), public_keys_hex_store[keystore_size], sizeof(public_keys_hex_store[keystore_size])) == 0){
             return -BIN2HEXERR;
-        }
+        }/**/
 
         keystore_size++;
 

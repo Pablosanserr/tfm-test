@@ -10,6 +10,8 @@
 #include "tfm_secure_api.h"
 #include "tfm_api.h"
 
+#include "../lib/bls_hsm.h"
+
 #define NUM_SECRETS 5
 
 struct dp_secret {
@@ -91,5 +93,27 @@ psa_status_t tfm_dp_secret_digest_req(psa_invec *in_vec, size_t in_len,
 
 
 psa_status_t tfm_dp_req_mngr_init(void){
+	return PSA_SUCCESS;
+}
+
+psa_status_t tfm_get_keystore_size_req(psa_invec *in_vec, size_t in_len,
+				      psa_outvec *out_vec, size_t size_len){
+	uint32_t ksize = get_keystore_size();
+	tfm_memcpy((void*) out_vec[0].base, &ksize, out_vec[0].len);
+	return PSA_SUCCESS;
+}
+
+psa_status_t tfm_secure_keygen_req(psa_invec *in_vec, size_t in_len,
+				      psa_outvec *out_vec, size_t size_len){
+	uint32_t index = secure_keygen(in_vec[0].base);
+	tfm_memcpy((void*) out_vec[0].base, &index, out_vec[0].len);
+	return PSA_SUCCESS;
+}
+
+// WIP
+psa_status_t tfm_get_key_req(psa_invec *in_vec, size_t in_len,
+				      psa_outvec *out_vec, size_t size_len){
+	uint32_t index = 67;
+	tfm_memcpy((void*) out_vec[0].base, &index, out_vec[0].len);
 	return PSA_SUCCESS;
 }

@@ -29,3 +29,38 @@ psa_status_t dp_secret_digest(uint32_t secret_index,
 
 	return status;
 }
+
+int tfm_get_keystore_size(){
+	uint32_t size;
+	psa_status_t status;
+	psa_invec out_vec[] = {
+		{ .base = &size, .len = sizeof(size) },
+	};
+
+	status = tfm_ns_interface_dispatch(
+				(veneer_fn)tfm_get_keystore_size_req_veneer,
+				NULL,  0,
+				(uint32_t)out_vec, IOVEC_LEN(out_vec));
+
+	return size;
+}
+
+int tfm_secure_keygen(char* info, size_t infosize){
+	uint32_t index;
+	psa_status_t status;
+
+    psa_invec in_vec[] = {
+		{ .base = info, .len = infosize }
+	};
+
+	psa_invec out_vec[] = {
+		{ .base = &index, .len = sizeof(index) },
+	};
+
+	status = tfm_ns_interface_dispatch(
+				(veneer_fn)tfm_secure_keygen_req_veneer,
+				(uint32_t)in_vec, IOVEC_LEN(in_vec),
+				(uint32_t)out_vec, IOVEC_LEN(out_vec));
+
+	return index;
+}

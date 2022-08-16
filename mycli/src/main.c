@@ -8,7 +8,10 @@
 #include <tfm_veneers.h>
 #include <tfm_ns_interface.h>
 
-#include "secure_partition_interface.h"
+//#include "secure_partition_interface.h"
+#include "bls_hsm_ns.h"
+
+char buffer[2048] = "";
 
 void main(void)
 {
@@ -27,4 +30,10 @@ void main(void)
 			printk("\n");
 		}
 	}
+
+	int ret = 99;
+	ret = keygen("", buffer);
+	printk("ret = %d\n", ret);
+	//printf(buffer);
+    //memset(buffer, 0, 2048);
 }

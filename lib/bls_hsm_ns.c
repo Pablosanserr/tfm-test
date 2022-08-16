@@ -1,5 +1,7 @@
 #include "bls_hsm_ns.h"
+#include "../mycli/src/secure_partition_interface.h"
 #include "common.h"
+#include "bls_hsm.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -53,8 +55,14 @@ int PBKDF2(uint8_t* salt, uint8_t* password, int it_cnt, uint8_t* key)
 /*
 Generates random key. Response is dumped to 'buff'
 */
-int keygen(char* data, char* buff){
-    int keystore_size = get_keystore_size();
+int keygen(char* data, char* buff){    
+    #ifndef TFM
+    //int keystore_size = get_keystore_size();
+    int keystore_size = tfm_get_keystore_size();
+    printk("tfm_get_keystore_size: %d\n", keystore_size);
+    #else
+    int keystore_size = tfm_get_keystore_size();
+    #endif
     
     if(keystore_size < 10){
         // key_info is an optional parameter.  This parameter MAY be used to derive
@@ -75,9 +83,17 @@ int keygen(char* data, char* buff){
                     strncpy(info, data, sizeof(info));
             }
         }
-
+        
         // Generate sk and pk
-        pk_index = secure_keygen(info);
+        #ifndef TFM
+        //pk_index = secure_keygen(info);
+        pk_index = tfm_secure_keygen(info, 32);
+        printk("tfm_secure_keygen: %d\n", pk_index);
+        #else
+        pk_index = tfm_secure_keygen(info);
+        #endif
+        return pk_index;
+        
         if(pk_index == -KEYSLIMIT){
             strcat(buff, "Can't generate more keys. Limit reached.\n");
             return pk_index;
@@ -85,9 +101,17 @@ int keygen(char* data, char* buff){
             strcat(buff, "Error when converting public key from binary to hexadecimal.\n");
             return pk_index;
         }
-        if(get_key(pk_index, pk) != 0){
+        #ifndef TFM
+        /*if(get_key(pk_index, pk) != 0){
             strcat(buff, "get_key: error\n");
+            return -3;
+        }*/
+        #else
+        if(tfm_get_key(pk_index, pk) != 0){
+            strcat(buff, "get_key: error\n");
+            return -3;
         }
+        #endif
         print_pk(pk, buff);
         
     }else{
